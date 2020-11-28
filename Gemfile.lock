@@ -92,6 +92,7 @@ GEM
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     htmlbeautifier (1.3.1)
+    httpclient (2.8.3)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     jbuilder (2.10.1)
@@ -254,6 +255,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   devise
   htmlbeautifier
+  httpclient
   jbuilder (~> 2.7)
   listen (~> 3.2)
   pg (>= 0.18, < 2.0)
