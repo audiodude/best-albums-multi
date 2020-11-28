@@ -3,6 +3,9 @@ class CreateAlbums < ActiveRecord::Migration[6.0]
     create_table :albums do |t|
       t.string :name
       t.date :date
+
+      t.string :mbid
+      t.string :spotify_id
     end
 
     add_reference :albums, :artist, index: true

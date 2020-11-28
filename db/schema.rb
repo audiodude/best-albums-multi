@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_21_044318) do
+ActiveRecord::Schema.define(version: 2020_11_28_034715) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,6 +18,8 @@ ActiveRecord::Schema.define(version: 2020_11_21_044318) do
   create_table "albums", force: :cascade do |t|
     t.string "name"
     t.date "date"
+    t.string "mbid"
+    t.string "spotify_id"
     t.bigint "artist_id"
     t.index ["artist_id"], name: "index_albums_on_artist_id"
   end
@@ -29,6 +31,22 @@ ActiveRecord::Schema.define(version: 2020_11_21_044318) do
     t.string "mbid"
     t.string "spotify_id"
     t.integer "type"
+  end
+
+  create_table "chart_entries", force: :cascade do |t|
+    t.integer "position"
+    t.bigint "album_id"
+    t.bigint "chart_id"
+    t.index ["album_id"], name: "index_chart_entries_on_album_id"
+    t.index ["chart_id"], name: "index_chart_entries_on_chart_id"
+  end
+
+  create_table "charts", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_charts_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -46,4 +64,7 @@ ActiveRecord::Schema.define(version: 2020_11_21_044318) do
   end
 
   add_foreign_key "albums", "artists"
+  add_foreign_key "chart_entries", "albums"
+  add_foreign_key "chart_entries", "charts"
+  add_foreign_key "charts", "users"
 end
