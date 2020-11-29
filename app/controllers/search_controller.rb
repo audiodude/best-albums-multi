@@ -1,6 +1,18 @@
 class SearchController < ApplicationController
   skip_before_action :authenticate_user!
 
+  def parse_date(date)
+    year, month, day = date.split('T')[0].split('-')
+    if month == '00'
+      return year
+    end
+    if day == '00'
+      return "#{year}-#{month}"
+    else
+      return "#{year}-#{month}-#{day}"
+    end
+  end
+
   def albums
     query = request.query_parameters['q']
     client = HTTPClient.new default_header: {'User-Agent' => 'BestAlbumsBot 0.1.0/Audiodude <audiodude@gmail.com>'}
@@ -13,8 +25,6 @@ class SearchController < ApplicationController
     results = JSON.parse(content)
     raise StandardError, 'Error from external endpoint' if results['success'] != 1
 
-    puts(results)
-
     ids = results['search'].map { |r| "wd:#{r['id']}" }.join(' ')
 
     if ids.empty?
@@ -23,7 +33,7 @@ class SearchController < ApplicationController
     end
 
     sparql = <<-SPARQL
-      SELECT ?a ?aLabel ?r ?rLabel ?mbid ?sid ?date WHERE {
+      SELECT ?a ?aLabel ?r ?rLabel ?mbid ?spid ?date WHERE {
         VALUES ?a { #{ids} }
         { ?a wdt:P31 wd:Q208569 } UNION
         { ?a wdt:P31 wd:Q482994 } UNION
@@ -35,7 +45,7 @@ class SearchController < ApplicationController
           ?a wdt:P436 ?mbid .
         }
         OPTIONAL {
-          ?a wdt:P2205 ?sid .
+          ?a wdt:P2205 ?spid .
         }
         OPTIONAL {
           ?a wdt:P577 ?date
@@ -58,13 +68,13 @@ class SearchController < ApplicationController
         id: id_,
         title: b['aLabel']['value'],
         artist: b['rLabel']['value'],
-        date: b['date'] && b['date']['value'],
+        date: b['date'] && parse_date(b['date']['value']),
         mbid: b['mbid'] && b['mbid']['value'],
-        spotify_id: b['sid'] && b['sid']['value']
+        spid: b['spid'] && b['spid']['value']
       }
       albums[id_] = a
     end
-    
+
     render json: albums.values
   end
 end

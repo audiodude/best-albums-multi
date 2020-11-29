@@ -1,7 +1,16 @@
 <template>
   <div id="app">
     <input @input="debounceInput" v-model="queryInput">
-    <album v-for="a in albums" :title="a.title" :artist="a.artist" :date="a.date" :key="a.id"></album>
+    <div class="album-container">
+      <album v-for="a in albums"
+        :title="a.title"
+        :artist="a.artist"
+        :date="a.date"
+        :mbid="a.mbid"
+        :spid="a.spid"
+        :key="a.id"
+      ></album>
+    </div>
   </div>
 </template>
 
@@ -45,5 +54,10 @@ export default {
 <style scoped>
 #app {
   margin-bottom: 1rem;
+}
+
+.album-container {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
