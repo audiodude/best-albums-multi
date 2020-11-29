@@ -48,7 +48,6 @@ class SearchController < ApplicationController
 
     res = client.post('https://query.wikidata.org/sparql', query: sparql, format: 'json')
     data = JSON.parse(res.body)
-    puts data
     albums = {}
 
     data['results']['bindings'].each do |b|
@@ -65,8 +64,7 @@ class SearchController < ApplicationController
       }
       albums[id_] = a
     end
-
-    puts 'Albums: ', albums
+    
     render json: albums.values
   end
 end
