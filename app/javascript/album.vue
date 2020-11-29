@@ -30,15 +30,9 @@ export default {
     align-items: center;
     border: 1px solid #000;
     display: flex;
-    max-width: 22%;
-    margin: .4rem;
+    max-width: 30%;
+    margin: .4rem .8rem .4rem 0;
     padding: .4rem;
-  }
-
-  @media (max-width: 1200px) {
-    .album {
-      max-width: 30%;
-    }
   }
 
   .info {
@@ -47,6 +41,47 @@ export default {
 
   .art {
     width: 100px;
+  }
+
+
+  @media (max-width: 1300px) {
+    .album {
+      max-width: 18%;
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .album {
+      max-width: 45%;
+    }
+    .art {
+      width: 80px;
+    }
+    .text {
+      font-size: 1rem;
+      line-height: 1.2rem;
+      margin-left: .3rem;
+    }
+    .date {
+     font-size: .6rem;
+    }
+  }
+
+  @media (max-width: 800px) {
+    .album {
+      max-width: 50%;
+    }
+    .art {
+      width: 60px;
+    }
+    .text {
+      font-size: .8rem;
+      line-height: 1.2rem;
+      margin-left: .2rem;
+    }
+    .date {
+     font-size: .6rem;
+    }
   }
 
   .text {

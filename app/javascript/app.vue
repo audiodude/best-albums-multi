@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <input @input="debounceInput" v-model="queryInput">
-    <div class="album-container">
+    <div v-if="albums.length == 0 && this.query">
+      <pulse-loader class="spinner" :loading="loading" :color="'blue'"></pulse-loader>
+      <div id="no-results" v-if="!loading">No results!</div>
+    </div>
+    <div v-else class="album-container">
       <album v-for="a in albums"
         :title="a.title"
         :artist="a.artist"
@@ -17,14 +21,17 @@
 <script>
 var debounce = require('debounce');
 var Album = require('./album.vue').default;
+var PulseLoader = require('vue-spinner/src/PulseLoader.vue').default;
 
 export default {
   components: {
     Album,
+    PulseLoader,
   },
   data: function () {
     return {
       albums: [],
+      loading: false,
       message: 'Hello Vue!',
       queryInput: '',
       query: '',
@@ -37,6 +44,7 @@ export default {
   },
   watch: {
     query: function () {
+      this.loading = true;
       fetch(`/search/albums?q=${this.query}`).then((r) => {
         if (!r.ok) {
           throw new Error('Search endpoint returned: ' + r.statusText);
@@ -44,7 +52,8 @@ export default {
         return r;
       }).then((r) => r.json())
         .then((data) => {
-          this.albums = data
+          this.albums = data;
+          this.loading = false;
       })
     }
   }
@@ -54,6 +63,10 @@ export default {
 <style scoped>
 #app {
   margin-bottom: 1rem;
+}
+
+.spinner, #no-results, .album-container {
+  margin-top: 1rem;
 }
 
 .album-container {
