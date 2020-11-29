@@ -16,6 +16,9 @@ export default {
   props: ['title', 'date', 'artist', 'mbid', 'spid'],
   methods: {
     getFrontUrl: function() {
+      if (!this.mbid) {
+        return '';
+      }
       return `https://coverartarchive.org/release-group/${ this.mbid }/front-250`;
     },
     getYear: function(d) {
