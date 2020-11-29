@@ -33,7 +33,11 @@ class SearchController < ApplicationController
         ?a wdt:P175 ?r .
         OPTIONAL {
           ?a wdt:P436 ?mbid .
+        }
+        OPTIONAL {
           ?a wdt:P2205 ?sid .
+        }
+        OPTIONAL {
           ?a wdt:P577 ?date
         }
         SERVICE wikibase:label {
@@ -44,6 +48,7 @@ class SearchController < ApplicationController
 
     res = client.post('https://query.wikidata.org/sparql', query: sparql, format: 'json')
     data = JSON.parse(res.body)
+    puts data
     albums = {}
 
     data['results']['bindings'].each do |b|
